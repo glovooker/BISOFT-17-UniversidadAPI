@@ -8,6 +8,7 @@ builder.Services.Configure<UniversidadDatabaseSettings>(
     builder.Configuration.GetSection("UniversidadDatabase"));
 
 builder.Services.AddSingleton<AlumnosService>();
+builder.Services.AddSingleton<CarrerasService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
