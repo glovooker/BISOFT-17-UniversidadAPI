@@ -10,5 +10,10 @@ public class UniversidadDatabaseSettings
 
     public string CarrerasCollectionName { get; set; } = null!;
 
+    public string GruposCollectionName { get; set; } = null!;
+
     public string ProfesoresCollectionName { get; set; } = null!;
+
+    public string UsuariosCollectionName { get; set; } = null!;
+
 }
