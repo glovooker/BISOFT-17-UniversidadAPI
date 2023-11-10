@@ -9,4 +9,8 @@ public class UniversidadDatabaseSettings
     public string AlumnosCollectionName { get; set; } = null!;
 
     public string CarrerasCollectionName { get; set; } = null!;
+    
+    public string CiclosCollectionName { get; set; } = null!;
+
+    public string CursosCollectionName { get; set; } = null!;
 }
