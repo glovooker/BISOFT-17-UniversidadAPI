@@ -10,6 +10,7 @@ builder.Services.Configure<UniversidadDatabaseSettings>(
 builder.Services.AddSingleton<AlumnosService>();
 builder.Services.AddSingleton<CarrerasService>();
 builder.Services.AddSingleton<GruposService>();
+builder.Services.AddSingleton<ProfesoresService>();
 builder.Services.AddSingleton<UsuariosService>();
 
 builder.Services.AddControllers();
