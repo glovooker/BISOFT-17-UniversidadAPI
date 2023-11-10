@@ -9,7 +9,7 @@ public class Ciclo
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
 
-    public int anio { get; set; }
+    public int año { get; set; }
     public int numero { get; set; }
     public DateTime fechaInicio { get; set; }
     public DateTime fechaFinalizacion { get; set; }
