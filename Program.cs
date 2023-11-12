@@ -1,11 +1,15 @@
 using UniversidadAPI.Modelos;
 using UniversidadAPI.Servicios;
+using UniversidadAPI.UniversidadDatabaseSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<UniversidadDatabaseSettings>(
-    builder.Configuration.GetSection("UniversidadDatabase"));
+builder.Services.AddSingleton<MongoDBInstance>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    return new MongoDBInstance(configuration);
+});
 
 builder.Services.AddSingleton<AlumnosService>();
 builder.Services.AddSingleton<CarrerasService>();
