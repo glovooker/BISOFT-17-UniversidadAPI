@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using UniversidadAPI.Modelos;
+using UniversidadAPI.UniversidadDatabaseSettings;
 
 namespace UniversidadAPI.Servicios
 {
@@ -8,17 +8,10 @@ namespace UniversidadAPI.Servicios
     {
         private readonly IMongoCollection<Carrera> _carrerasCollection;
 
-        public CarrerasService(
-        IOptions<UniversidadDatabaseSettings> universidadDatabaseSettings)
+        public CarrerasService(MongoDBInstance mongoDBInstance)
         {
-            var mongoClient = new MongoClient(
-                universidadDatabaseSettings.Value.ConnectionString);
+            _carrerasCollection = mongoDBInstance.GetDatabase().GetCollection<Carrera>("Carrera");
 
-            var mongoDatabase = mongoClient.GetDatabase(
-                universidadDatabaseSettings.Value.DatabaseName);
-
-            _carrerasCollection = mongoDatabase.GetCollection<Carrera>(
-                universidadDatabaseSettings.Value.CarrerasCollectionName);
         }
 
         public async Task<List<Carrera>> GetAsync() =>

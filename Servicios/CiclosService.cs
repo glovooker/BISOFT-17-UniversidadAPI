@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using UniversidadAPI.Modelos;
+using UniversidadAPI.UniversidadDatabaseSettings;
 
 namespace UniversidadAPI.Servicios
 {
@@ -8,17 +9,9 @@ namespace UniversidadAPI.Servicios
     {
         private readonly IMongoCollection<Ciclo> _ciclosCollection;
 
-        public CiclosService(
-        IOptions<UniversidadDatabaseSettings> universidadDatabaseSettings)
+        public CiclosService(MongoDBInstance mongoDBInstance)
         {
-            var mongoClient = new MongoClient(
-                universidadDatabaseSettings.Value.ConnectionString);
-
-            var mongoDatabase = mongoClient.GetDatabase(
-                universidadDatabaseSettings.Value.DatabaseName);
-
-            _ciclosCollection = mongoDatabase.GetCollection<Ciclo>(
-                universidadDatabaseSettings.Value.CiclosCollectionName);
+            _ciclosCollection = mongoDBInstance.GetDatabase().GetCollection<Ciclo>("Ciclo");
         }
 
         public async Task<List<Ciclo>> GetAsync() =>

@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using UniversidadAPI.Modelos;
+using UniversidadAPI.UniversidadDatabaseSettings;
 
 namespace UniversidadAPI.Servicios
 {
@@ -8,17 +8,9 @@ namespace UniversidadAPI.Servicios
     {
         private readonly IMongoCollection<Profesor> _profesoresCollection;
 
-        public ProfesoresService(
-                       IOptions<UniversidadDatabaseSettings> universidadDatabaseSettings)
+        public ProfesoresService(MongoDBInstance mongoDBInstance)
         {
-            var mongoClient = new MongoClient(
-                               universidadDatabaseSettings.Value.ConnectionString);
-
-            var mongoDatabase = mongoClient.GetDatabase(
-                               universidadDatabaseSettings.Value.DatabaseName);
-
-            _profesoresCollection = mongoDatabase.GetCollection<Profesor>(
-                               universidadDatabaseSettings.Value.ProfesoresCollectionName);
+            _profesoresCollection = mongoDBInstance.GetDatabase().GetCollection<Profesor>("Profesor");
         }
 
         public async Task<List<Profesor>> GetAsync() =>
