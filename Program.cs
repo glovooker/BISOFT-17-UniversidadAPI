@@ -1,6 +1,6 @@
-using UniversidadAPI.Modelos;
 using UniversidadAPI.Servicios;
 using UniversidadAPI.UniversidadDatabaseSettings;
+using UniversidadAPI.Observer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,9 @@ builder.Services.AddSingleton<GruposService>();
 builder.Services.AddSingleton<ProfesoresService>();
 builder.Services.AddSingleton<UsuariosService>();
 
+// Registra SignalR como un servicio
+builder.Services.AddSignalR();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -34,9 +37,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
+// Mapea los controladores y el hub de SignalR
 app.MapControllers();
+app.MapHub<TableUpdateHub>("/tableUpdateHub"); // Agrega esta línea para mapear tu Hub de SignalR
 
 app.Run();
