@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniversidadAPI.Iterador;
 using UniversidadAPI.Modelos;
 using UniversidadAPI.Servicios;
 
@@ -14,8 +15,20 @@ public class GruposController : ControllerBase
         _gruposService = gruposService;
 
     [HttpGet]
-    public async Task<List<Grupo>> Get() =>
-        await _gruposService.GetAsync();
+    public async Task<IActionResult> Get()
+    {
+        var grupos = await _gruposService.GetAsync();
+        var gruposCollection = new GenericCollection<Grupo>(grupos);
+        var iterator = gruposCollection.CreateIterator();
+
+        var gruposList = new List<Grupo>();
+        while (iterator.HasNext())
+        {
+            gruposList.Add(iterator.Next());
+        }
+
+        return Ok(gruposList);
+    }
 
     [HttpGet("{id:length(24)}")]
     public async Task<ActionResult<Grupo>> Get(string id)
