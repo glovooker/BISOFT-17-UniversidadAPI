@@ -15,6 +15,7 @@ public class CursosController : ControllerBase
         _cursosService = cursosService;
 
     [HttpGet]
+    [Route("RetrieveAll")]
     public async Task<IActionResult> Get()
     {
         var cursos = await _cursosService.GetAsync();
@@ -30,7 +31,8 @@ public class CursosController : ControllerBase
         return Ok(cursosList);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet]
+    [Route("RetrieveById")]
     public async Task<ActionResult<Curso>> Get(string id)
     {
         var curso = await _cursosService.GetAsync(id);
@@ -44,6 +46,7 @@ public class CursosController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Create")]
     public async Task<IActionResult> Post(Curso newCurso)
     {
         await _cursosService.CreateAsync(newCurso);
@@ -51,24 +54,24 @@ public class CursosController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newCurso.Id }, newCurso);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Curso updatedCurso)
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Update(Curso updatedCurso)
     {
-        var curso = await _cursosService.GetAsync(id);
+        var curso = await _cursosService.GetAsync(updatedCurso.Id);
 
         if (curso is null)
         {
             return NotFound();
         }
 
-        updatedCurso.Id = curso.Id;
-
-        await _cursosService.UpdateAsync(id, updatedCurso);
+        await _cursosService.UpdateAsync(updatedCurso.Id, updatedCurso);
 
         return NoContent();
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete]
+    [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
         var curso = await _cursosService.GetAsync(id);

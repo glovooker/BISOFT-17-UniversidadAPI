@@ -17,6 +17,7 @@ public class AlumnosController : ControllerBase
 
 
     [HttpGet]
+    [Route("RetrieveAll")]
     public async Task<IActionResult> Get()
     {
         var alumnos = await _alumnosService.GetAsync();
@@ -32,7 +33,8 @@ public class AlumnosController : ControllerBase
         return Ok(alumnosList);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet]
+    [Route("RetrieveById")]
     public async Task<ActionResult<Alumno>> Get(string id)
     {
         var alumno = await _alumnosService.GetAsync(id);
@@ -46,6 +48,7 @@ public class AlumnosController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Create")]
     public async Task<IActionResult> Post(Alumno newAlumno)
     {
         await _alumnosService.CreateAsync(newAlumno);
@@ -53,10 +56,11 @@ public class AlumnosController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newAlumno.Id }, newAlumno);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Alumno updatedAlumno)
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Update(Alumno updatedAlumno)
     {
-        var alumno = await _alumnosService.GetAsync(id);
+        var alumno = await _alumnosService.GetAsync(updatedAlumno.Id);
 
         if (alumno is null)
         {
@@ -65,12 +69,13 @@ public class AlumnosController : ControllerBase
 
         updatedAlumno.Id = alumno.Id;
 
-        await _alumnosService.UpdateAsync(id, updatedAlumno);
+        await _alumnosService.UpdateAsync(updatedAlumno.Id, updatedAlumno);
 
         return NoContent();
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete]
+    [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
         var alumno = await _alumnosService.GetAsync(id);

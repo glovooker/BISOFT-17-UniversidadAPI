@@ -15,6 +15,7 @@ public class CiclosController : ControllerBase
         _ciclosService = ciclosService;
 
     [HttpGet]
+    [Route("RetrieveAll")]
     public async Task<IActionResult> Get()
     {
         var ciclos = await _ciclosService.GetAsync();
@@ -30,7 +31,8 @@ public class CiclosController : ControllerBase
         return Ok(ciclosList);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet]
+    [Route("RetrieveById")]
     public async Task<ActionResult<Ciclo>> Get(string id)
     {
         var ciclo = await _ciclosService.GetAsync(id);
@@ -44,6 +46,7 @@ public class CiclosController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Create")]
     public async Task<IActionResult> Post(Ciclo newCiclo)
     {
         await _ciclosService.CreateAsync(newCiclo);
@@ -51,10 +54,11 @@ public class CiclosController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newCiclo.Id }, newCiclo);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Ciclo updatedCiclo)
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Update(Ciclo updatedCiclo)
     {
-        var ciclo = await _ciclosService.GetAsync(id);
+        var ciclo = await _ciclosService.GetAsync(updatedCiclo.Id);
 
         if (ciclo is null)
         {
@@ -63,12 +67,13 @@ public class CiclosController : ControllerBase
 
         updatedCiclo.Id = ciclo.Id;
 
-        await _ciclosService.UpdateAsync(id, updatedCiclo);
+        await _ciclosService.UpdateAsync(updatedCiclo.Id, updatedCiclo);
 
         return NoContent();
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete]
+    [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
         var ciclo = await _ciclosService.GetAsync(id);

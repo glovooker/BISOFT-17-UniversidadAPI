@@ -15,6 +15,7 @@ public class ProfesoresController : ControllerBase
         _profesorService = profesorService;
 
     [HttpGet]
+    [Route("RetrieveAll")]
     public async Task<IActionResult> Get()
     {
         var profesores = await _profesorService.GetAsync();
@@ -30,7 +31,8 @@ public class ProfesoresController : ControllerBase
         return Ok(profesoresList);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet]
+    [Route("RetrieveById")]
     public async Task<ActionResult<Profesor>> Get(string id)
     {
         var profesor = await _profesorService.GetAsync(id);
@@ -44,6 +46,7 @@ public class ProfesoresController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Create")]
     public async Task<IActionResult> Post(Profesor newProfesor)
     {
         await _profesorService.CreateAsync(newProfesor);
@@ -51,10 +54,11 @@ public class ProfesoresController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newProfesor.Id }, newProfesor);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Profesor updatedProfesor)
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Update(Profesor updatedProfesor)
     {
-        var profesor = await _profesorService.GetAsync(id);
+        var profesor = await _profesorService.GetAsync(updatedProfesor.Id);
 
         if (profesor is null)
         {
@@ -63,12 +67,13 @@ public class ProfesoresController : ControllerBase
 
         updatedProfesor.Id = profesor.Id;
 
-        await _profesorService.UpdateAsync(id, updatedProfesor);
+        await _profesorService.UpdateAsync(updatedProfesor.Id, updatedProfesor);
 
         return NoContent();
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete]
+    [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
         var profesor = await _profesorService.GetAsync(id);
