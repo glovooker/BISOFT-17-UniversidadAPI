@@ -15,6 +15,7 @@ public class UsuariosController : ControllerBase
         _usuariosService = usuariosService;
 
     [HttpGet]
+    [Route("RetrieveAll")]
     public async Task<IActionResult> Get()
     {
         var usuarios = await _usuariosService.GetAsync();
@@ -30,7 +31,8 @@ public class UsuariosController : ControllerBase
         return Ok(usuariosList);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet]
+    [Route("RetrieveById")]
     public async Task<ActionResult<Usuario>> Get(string id)
     {
         var usuario = await _usuariosService.GetAsync(id);
@@ -44,6 +46,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Create")]
     public async Task<IActionResult> Post(Usuario newUsuario)
     {
         await _usuariosService.CreateAsync(newUsuario);
@@ -51,10 +54,11 @@ public class UsuariosController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newUsuario.Id }, newUsuario);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Usuario updatedUsuario)
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Update(Usuario updatedUsuario)
     {
-        var usuario = await _usuariosService.GetAsync(id);
+        var usuario = await _usuariosService.GetAsync(updatedUsuario.Id);
 
         if (usuario is null)
         {
@@ -63,12 +67,13 @@ public class UsuariosController : ControllerBase
 
         updatedUsuario.Id = usuario.Id;
 
-        await _usuariosService.UpdateAsync(id, updatedUsuario);
+        await _usuariosService.UpdateAsync(updatedUsuario.Id, updatedUsuario);
 
         return NoContent();
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete]
+    [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
         var usuario = await _usuariosService.GetAsync(id);

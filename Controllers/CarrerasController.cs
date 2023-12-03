@@ -15,6 +15,7 @@ public class CarrerasController : ControllerBase
         _carrerasService = carrerasService;
 
     [HttpGet]
+    [Route("RetrieveAll")]
     public async Task<IActionResult> Get()
     {
         var carreras = await _carrerasService.GetAsync();
@@ -30,7 +31,8 @@ public class CarrerasController : ControllerBase
         return Ok(carrerasList);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet]
+    [Route("RetrieveById")]
     public async Task<ActionResult<Carrera>> Get(string id)
     {
         var carrera = await _carrerasService.GetAsync(id);
@@ -44,6 +46,7 @@ public class CarrerasController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Create")]
     public async Task<IActionResult> Post(Carrera newCarrera)
     {
         await _carrerasService.CreateAsync(newCarrera);
@@ -51,10 +54,11 @@ public class CarrerasController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newCarrera.Id }, newCarrera);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Carrera updatedCarrera)
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Update(Carrera updatedCarrera)
     {
-        var carrera = await _carrerasService.GetAsync(id);
+        var carrera = await _carrerasService.GetAsync(updatedCarrera.Id);
 
         if (carrera is null)
         {
@@ -63,12 +67,13 @@ public class CarrerasController : ControllerBase
 
         updatedCarrera.Id = carrera.Id;
 
-        await _carrerasService.UpdateAsync(id, updatedCarrera);
+        await _carrerasService.UpdateAsync(updatedCarrera.Id, updatedCarrera);
 
         return NoContent();
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete]
+    [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
         var carrera = await _carrerasService.GetAsync(id);

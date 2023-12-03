@@ -15,6 +15,7 @@ public class GruposController : ControllerBase
         _gruposService = gruposService;
 
     [HttpGet]
+    [Route("RetrieveAll")]
     public async Task<IActionResult> Get()
     {
         var grupos = await _gruposService.GetAsync();
@@ -30,7 +31,8 @@ public class GruposController : ControllerBase
         return Ok(gruposList);
     }
 
-    [HttpGet("{id:length(24)}")]
+    [HttpGet]
+    [Route("RetrieveById")]
     public async Task<ActionResult<Grupo>> Get(string id)
     {
         var grupo = await _gruposService.GetAsync(id);
@@ -44,6 +46,7 @@ public class GruposController : ControllerBase
     }
 
     [HttpPost]
+    [Route("Create")]
     public async Task<IActionResult> Post(Grupo newGrupo)
     {
         await _gruposService.CreateAsync(newGrupo);
@@ -51,10 +54,11 @@ public class GruposController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newGrupo.Id }, newGrupo);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, Grupo updatedGrupo)
+    [HttpPut]
+    [Route("Update")]
+    public async Task<IActionResult> Update(Grupo updatedGrupo)
     {
-        var grupo = await _gruposService.GetAsync(id);
+        var grupo = await _gruposService.GetAsync(updatedGrupo.Id);
 
         if (grupo is null)
         {
@@ -63,12 +67,13 @@ public class GruposController : ControllerBase
 
         updatedGrupo.Id = grupo.Id;
 
-        await _gruposService.UpdateAsync(id, updatedGrupo);
+        await _gruposService.UpdateAsync(updatedGrupo.Id, updatedGrupo);
 
         return NoContent();
     }
 
-    [HttpDelete("{id:length(24)}")]
+    [HttpDelete]
+    [Route("Delete")]
     public async Task<IActionResult> Delete(string id)
     {
         var grupo = await _gruposService.GetAsync(id);
